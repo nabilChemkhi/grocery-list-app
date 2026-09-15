@@ -50,10 +50,12 @@ function addItem(e) {
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>`;
+
     const deleteBtn = element.querySelector('.delete-btn');
     const editBtn = element.querySelector('.edit-btn');
+
     deleteBtn.addEventListener('click', deleteItem);
-    editBtn.addEventListener('click', editItem);                
+    editBtn.addEventListener('click', editItem);
 
     // add to the list
     list.appendChild(element);
@@ -72,11 +74,35 @@ function addItem(e) {
 
     // clear input
     grocery.value = '';
+
   } else if (value && editFlag) {
-    editElement.querySelector('.title').textContent = value;
+    editElement.innerHTML = `<p class="title">${value}</p>
+
+                    <div class="btn-container">
+                        <!-- Edit button -->
+                        <button type="button" class="edit-btn">
+                            <i class="fas fa-edit"></i>
+                        </button>
+
+                        <!-- Delete button -->
+                        <button type="button" class="delete-btn">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>`;
+
+    const deleteBtn = editElement.querySelector('.delete-btn');
+    const editBtn = editElement.querySelector('.edit-btn');
+
+    deleteBtn.addEventListener('click', deleteItem);
+    editBtn.addEventListener('click', editItem);
+
     displayAlert('Value changed', 'success');
+
+    // edit local storage
     editLocalStorage(editID, value);
+
     setBackToDefault();
+
   } else {
     displayAlert('Please enter a value', 'danger');
   }
@@ -91,35 +117,55 @@ function displayAlert(text, action) {
     alert.classList.remove(`alert-${action}`);
   }, 3000);
 }
+
 // clear items
 function clearItems() {
     const items = document.querySelectorAll('.grocery-item');
+
     if (items.length > 0) {
         items.forEach(item => {
             list.removeChild(item);
         });
+
         displayAlert('List cleared', 'success');
         container.classList.remove('show-container');
         setBackToDefault();
+
         // localStorage.removeItem('list');
     }
 }
+
 //edit function
 function editItem(e) {
     const element = e.currentTarget.parentElement.parentElement;
+
+    // set edit item
+    editElement = e.currentTarget.parentElement.previousElementSibling.parentElement;
+
+    // set form value
+    grocery.value = editElement.querySelector('.title').innerHTML;
+
+    editFlag = true;
+    editID = element.dataset.id;
+    submitBtn.textContent = 'edit';
 }
+
 //delete function
 function deleteItem(e) {
     const element = e.currentTarget.parentElement.parentElement;
     const id = element.dataset.id;
+
     list.removeChild(element);
+
     if (list.children.length === 0) {
         container.classList.remove('show-container');
     }
+
     displayAlert('Item removed', 'danger');
     setBackToDefault();
+
     //remove from local storage
-   // removeFromLocalStorage(id);
+    // removeFromLocalStorage(id);
 }
 
 //set back to default
@@ -133,6 +179,14 @@ function setBackToDefault() {
 // ****** LOCAL STORAGE **********
 function addToLocalStorage(id, value) {
     console.log('added to local storage');
+}
+
+function removeFromLocalStorage(id) {
+    console.log('removed from local storage');
+}
+
+function editLocalStorage(id, value) {
+    console.log('edited local storage');
 }
 
 // ****** SETUP ITEMS **********
