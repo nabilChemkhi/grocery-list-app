@@ -17,7 +17,8 @@ let editID = "";
 form.addEventListener('submit', addItem);
 // clear items
 clearBtn.addEventListener('click', clearItems);
-
+// setup items
+window.addEventListener('DOMContentLoaded', setupItems);
 
 // ****** FUNCTIONS **********
 function addItem(e) {
@@ -72,9 +73,6 @@ function addItem(e) {
     //set back to default
     setBackToDefault();
 
-    // clear input
-    grocery.value = '';
-
   } else if (value && editFlag) {
     editElement.innerHTML = `<p class="title">${value}</p>
 
@@ -89,12 +87,6 @@ function addItem(e) {
                             <i class="fas fa-trash"></i>
                         </button>
                     </div>`;
-
-    const deleteBtn = editElement.querySelector('.delete-btn');
-    const editBtn = editElement.querySelector('.edit-btn');
-
-    deleteBtn.addEventListener('click', deleteItem);
-    editBtn.addEventListener('click', editItem);
 
     displayAlert('Value changed', 'success');
 
@@ -140,7 +132,7 @@ function editItem(e) {
     const element = e.currentTarget.parentElement.parentElement;
 
     // set edit item
-    editElement = e.currentTarget.parentElement.previousElementSibling.parentElement;
+    editElement = e.currentTarget.parentElement.parentElement;
 
     // set form value
     grocery.value = editElement.querySelector('.title').innerHTML;
@@ -165,7 +157,7 @@ function deleteItem(e) {
     setBackToDefault();
 
     //remove from local storage
-    // removeFromLocalStorage(id);
+    removeFromLocalStorage(id);
 }
 
 //set back to default
@@ -178,15 +170,94 @@ function setBackToDefault() {
 
 // ****** LOCAL STORAGE **********
 function addToLocalStorage(id, value) {
-    console.log('added to local storage');
+    const grocery = { id, value };
+
+    let items = getLocalStorage();
+
+    items.push(grocery);
+
+    localStorage.setItem('list', JSON.stringify(items));
+}
+
+function getLocalStorage() {
+    let groceryList = localStorage.getItem('list');
+
+    if (groceryList) {
+        return JSON.parse(groceryList);
+    } else {
+        return [];
+    }
 }
 
 function removeFromLocalStorage(id) {
-    console.log('removed from local storage');
+    let items = getLocalStorage();
+
+    items = items.filter(function (item) {
+        if (item.id !== id) {
+            return item;
+        }
+    });
+
+    localStorage.setItem('list', JSON.stringify(items));
 }
 
 function editLocalStorage(id, value) {
-    console.log('edited local storage');
+    let items = getLocalStorage();
+
+    items = items.map(function (item) {
+        if (item.id === id) {
+            item.value = value;
+        }
+
+        return item;
+    });
+
+    localStorage.setItem('list', JSON.stringify(items));
 }
 
 // ****** SETUP ITEMS **********
+function setupItems() {
+    let items = getLocalStorage();
+
+    if (items.length > 0) {
+        items.forEach(function (item) {
+            createListItem(item.id, item.value);
+        });
+
+        container.classList.add('show-container');
+    }
+}
+
+function createListItem(id, value) {
+    const element = document.createElement('article');
+
+    // add class
+    element.classList.add('grocery-item');
+
+    // add id
+    const attr = document.createAttribute('data-id');
+    attr.value = id;
+    element.setAttributeNode(attr);
+
+    element.innerHTML = `<p class="title">${value}</p>
+
+                    <div class="btn-container">
+                        <!-- Edit button -->
+                        <button type="button" class="edit-btn">
+                            <i class="fas fa-edit"></i>
+                        </button>
+
+                        <!-- Delete button -->
+                        <button type="button" class="delete-btn">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>`;
+
+    const deleteBtn = element.querySelector('.delete-btn');
+    const editBtn = element.querySelector('.edit-btn');
+
+    deleteBtn.addEventListener('click', deleteItem);
+    editBtn.addEventListener('click', editItem);
+
+    list.appendChild(element);
+}
