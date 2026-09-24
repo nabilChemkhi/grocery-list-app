@@ -1,0 +1,41 @@
+// Problem — Student Scores
+// Topics: arrays, if/else, loops, objects, array operations
+
+// You have an array of students:
+const students = [
+  { name: "Aisha", score: 85 },
+  { name: "Rahul", score: 42 },
+  { name: "John", score: 67 },
+  { name: "Sara", score: 30 },
+  { name: "David", score: 91 }
+];
+
+// Tasks:
+// Use a loop to go through every student.
+// Print the student's name and whether they passed or failed.
+// A student passes if their score is 50 or above.
+// Calculate the total score.
+// Calculate the average score.
+
+// Expected output:
+// Aisha passed
+// Rahul failed
+// John passed
+// Sara failed
+// David passed
+// Total: 315
+// Average: 63
+
+// Your Solution:
+students.forEach(student => {
+  if (student.score >= 50) {
+    console.log(`${student.name} passed`);}
+  
+else{console.log(`${student.name} failed`);}
+});
+
+totalScore = students.reduce(((total, student)=> total + student.score), 0);
+console.log(totalScore);
+
+averageScore = totalScore / students.length;
+console.log(averageScore);

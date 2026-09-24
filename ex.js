@@ -1,24 +1,11 @@
-const person = {
-    name: "Nabil",
-    age: 35,
-    getName() {
-        return `${this.name}`;
-    },
-    getAge() {
-        return `${this.age}`;
-    },
-    setName(name) {
-        this.name = name;
-    },
-    setAge(age) {
-        this.age = age;
-    }
-}
+// 
 
-console.log(person.getName())
-console.log(person.getAge())
+let tab=[1,2,3,4,5,6,7,8,9,10];
 
-person.setName("Ahmed")
-person.setAge(30)
-console.log(person.getName())
-console.log(person.getAge())
+
+tab.forEach((element) => {
+    element = element * 2;
+    console.log(element);
+} )
+
+console.log(tab);
