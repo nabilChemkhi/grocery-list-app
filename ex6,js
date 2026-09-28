@@ -1,0 +1,67 @@
+const users = [
+  {
+    name: "Aisha",
+    age: 22,
+    city: "Mumbai",
+    active: true
+  },
+  {
+    name: "Rahul",
+    age: 17,
+    city: "Delhi",
+    active: false
+  },
+  {
+    name: "John",
+    age: 25,
+    city: "Mumbai",
+    active: true
+  },
+  {
+    name: "Sara",
+    age: 16,
+    city: "Pune",
+    active: true
+  }
+];
+
+// Tasks
+// Use destructuring to get name, age, and city from each user.
+// Use if/else to print whether each user is an adult.
+// Display this information along their city
+
+//making a small function to avoid repetition
+const isAdult = (a) => a >= 18
+
+users.forEach(u => {
+    const {name, age, city, _} = u;
+    if(isAdult(age)) {
+        console.log(`${name} is an adult from the city of: ${city}`);
+    } else {
+        console.log(`${name} is a minor from the city of: ${city}`);
+    }
+})
+
+
+//could use ternary op here status = isAdult(age) ? "adult" : "minor"
+// Use filter() to find users who are active.
+users
+    .filter(u => u.active)
+    .forEach(u => console.log(`${u.name} is active`))
+
+// Use filter() to find users who live in Mumbai.
+
+const targetCity = "mumbai";
+users
+    .filter(u => u.city.toLowerCase() === targetCity)
+    .forEach(u => console.log(`${u.name} is from ${targetCity}`))
+
+
+// Use map() and the spread operator to create a new array where each user has a new property called isAdult.
+// Your Solution:
+
+const expandedUsers = users.map(u => {
+    return {...u, isAdult: isAdult(u.age)}
+})
+
+console.log(expandedUsers)
