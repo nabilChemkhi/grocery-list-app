@@ -21,6 +21,8 @@ const cart = [
 // ------------------------------------
 // 1. Use map() to calculate each item's total
 // ------------------------------------
+const itemTotals = cart.map(item => item.price * item.quantity);
+console.log(itemTotals);
 
 
 
@@ -35,6 +37,8 @@ const cart = [
 // ------------------------------------
 // 2. Use filter() to find expensive items
 // ------------------------------------
+const expensiveItems = cart.filter(item => item.price > 100);
+console.log(expensiveItems);
 
 
 
@@ -47,6 +51,10 @@ const cart = [
 // ------------------------------------
 // 3. Use map() + spread to create new objects
 // ------------------------------------
+const cartWithTotal = cart.map(item => {
+  return { ...item, total: item.price * item.quantity };
+});
+console.log(cartWithTotal);
 
 
 
@@ -61,6 +69,8 @@ const cart = [
 // ------------------------------------
 // 4. Calculate the total cart price
 // ------------------------------------
+const totalCartPrice = cartWithTotal.reduce((totalCart, item) => totalCart + item.total, 0);
+console.log(`Cart total: ${totalCartPrice}`);
 
 
 
